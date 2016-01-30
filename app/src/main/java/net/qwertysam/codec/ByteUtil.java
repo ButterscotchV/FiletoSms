@@ -70,10 +70,10 @@ public class ByteUtil {
     }
 
     public static String encodeBytes(byte[] bytes) {
-        return Base64.encodeToString(bytes, Base64.URL_SAFE);
+        return Base91.encodeToString(bytes);
     }
 
     public static byte[] decodeBytes(String base64Num) {
-        return Base64.decode(base64Num, Base64.URL_SAFE);
+        return Base91.decode(base64Num);
     }
 }

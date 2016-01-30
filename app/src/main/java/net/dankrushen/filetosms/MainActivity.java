@@ -148,8 +148,10 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             int sectionNum = getArguments().getInt(ARG_SECTION_NUMBER);
+            //Gets correct screen for selected tab
             rootView = (sectionNum == 1 ? inflater.inflate(R.layout.sendfragment, container, false) : inflater.inflate(R.layout.receivefragment, container, false));
 
+            //Sets up the selected view
             if(sectionNum == 1) {
                 buttonOpenDialog = (Button) rootView.findViewById(R.id.opendialog);
                 buttonOpenDialog.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 setPercentage(Tasks.IDLE, 0);
                 setProcessing(false);
 
+                //When send button is pushed
                 senddata = (Button) rootView.findViewById(R.id.send);
                 senddata.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -193,8 +196,8 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
 
+        //Dialog for choosing file
         private void fileChooser(){
-            // custom dialog
             final Dialog dialog = new Dialog(getActivity());
             dialog.setContentView(R.layout.dialoglayout);
             dialog.setCancelable(true);
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
 
+        //Lists directories for the file chooser dialog
         private void ListDir(File f) {
             if (f.equals(root)) {
                 buttonUp.setEnabled(false);
@@ -256,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
             dialog_ListView.setAdapter(directoryList);
         }
 
+        //Sets percentage for percentage bar on the send tab
         public void setPercentage(final Tasks task, final int percent) {
             this.getActivity().runOnUiThread(new Thread() {
                 public void run() {
@@ -266,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        //Sets send tabs items into processing view
         public void setProcessing(final boolean visible){
             this.getActivity().runOnUiThread(new Thread() {
                 public void run() {
@@ -276,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        //Calculates time from seconds to a more user friendly layout
         public String getTime(long seconds){
             int days = (int) TimeUnit.SECONDS.toDays(seconds);
             long hours = TimeUnit.SECONDS.toHours(seconds) - (days *24);
@@ -284,23 +291,8 @@ public class MainActivity extends AppCompatActivity {
             return (days == 0 ? "" : days + "d ") + (hours == 0 ? "" : hours + "h ") + (minute == 0 ? "" : minute + "m ") + (second == 0 ? "" : second + "s");
         }
 
-        public String[] splitStringEvery(String s, int interval) {
-            int arrayLength = (int) Math.ceil(((s.length() / (double)interval)));
-            String[] result = new String[arrayLength];
-
-            int j = 0;
-            int lastIndex = result.length - 1;
-            for (int i = 0; i < lastIndex; i++) {
-                result[i] = s.substring(j, j + interval);
-                j += interval;
-            } //Add the last bit
-            result[lastIndex] = s.substring(j);
-
-            return result;
-        }
-
+        //Dialog that pops up when you click the send button with a file and phone number
         private void warningDialog(){
-            // custom dialog
             final Dialog dialog = new Dialog(getActivity());
             dialog.setContentView(R.layout.dialogwarn);
             dialog.setCancelable(true);
@@ -311,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
             File sellect = new File(sell);
             warnTxtBytes.setText(String.valueOf(sellect.length()) + " bytes");
             TextView warnTxtMessages = (TextView) dialog.findViewById(R.id.warnTxtMessages);
-            double massages = Math.ceil(sellect.length()/105)+3;
+            double massages = Math.ceil(sellect.length()/130)+3; //For 140 Char message it was 105
             double messagesNum = (massages == 3 ? massages + 1 : massages);
             warnTxtMessages.setText(String.format("%.0f", messagesNum).replace(".0", "") + " messages");
             double processTime = Math.ceil((sellect.length() * 0.0000006353240152) + 1)-1;
@@ -319,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
             TextView warnTxtEstTime = (TextView) dialog.findViewById(R.id.warnTxtEstTime);
             warnTxtEstTime.setText(getTime((long) fullTime));
             Button cnclBtn = (Button) dialog.findViewById(R.id.cancelBtn);
-            // if button is clicked, close the custom dialog
+            // if button is clicked, close the dialog
             cnclBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -328,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             Button contBtn = (Button) dialog.findViewById(R.id.continueBtn);
-            // if button is clicked, close the custom dialog
+            // if button is clicked, close the dialog
             contBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -342,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
         }
 
+        //Processes bytes and send messages for sending
         private void byteprocessor() {
             setProcessing(true);
 
@@ -363,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
 
                     String firstMessage = "<(<(||\"" + fileSelected.getText() + "\"," + sellect.length() + " bytes," + encoded.size() + " message(s)," + sdf.format(cal.getTime()) + "||";
 
-                    for(String sendable : splitStringEvery(firstMessage, 140)) {
+                    for(String sendable : ByteUtil.splitIntoSendables(firstMessage)) {
                         sms.sendTextMessage(phoneNumber, null, sendable, null, null);
                     }
 
@@ -377,6 +370,9 @@ public class MainActivity extends AppCompatActivity {
                     isRunning = false;
                 }
             }.start();
+
+            Toast.makeText(getActivity(), "Done!",
+                    Toast.LENGTH_LONG).show();
 
             setProcessing(false);
         }
