@@ -47,4 +47,21 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:layout_below="@+id/getSMS"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:layout_above="@+id/getSMS"
+        android:layout_centerHorizontal="true"
+        android:hint="File Output Name With Extension" />
+
 </RelativeLayout>

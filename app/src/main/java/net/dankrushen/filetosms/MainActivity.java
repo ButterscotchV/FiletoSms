@@ -26,10 +26,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.qwertysam.codec.Base91;
 import net.qwertysam.codec.ByteUtil;
 import net.qwertysam.percentage.Tasks;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -117,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
         TextView taskDisplay;
         EditText phoneNum;
         boolean isRunning = false;
+        EditText recieveText;
+        EditText recieveText2;
+        Button recieveBtn;
 
         //File chooser dialog
         ListView dialog_ListView;
@@ -188,6 +194,27 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else {
                             Toast.makeText(getActivity(), "Please wait for the current process to finish!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+            else
+            {
+                recieveText = (EditText) rootView.findViewById(R.id.editText);
+                recieveText2 = (EditText) rootView.findViewById(R.id.editText2);
+                recieveBtn = (Button) rootView.findViewById(R.id.getSMS);
+
+                recieveBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!isRunning) {
+                            try {
+                                FileOutputStream foss = new FileOutputStream("/storage/sdcard0/" + recieveText2.getText().toString());
+                                foss.write(Base91.decode(recieveText.getText().toString()));
+                                foss.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
