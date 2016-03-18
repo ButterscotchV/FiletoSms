@@ -13,12 +13,11 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="47dp"
         android:indeterminate="false"
         android:max="100"
         android:progress="50"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="130dp"
+        android:layout_below="@+id/getSMS" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,8 +25,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Current Process"
         android:id="@+id/curProc"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="105dp"
+        android:layout_below="@+id/getSMS"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,8 +35,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="50%"
         android:id="@+id/percentage"
+        android:layout_below="@+id/curProc"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="33dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -44,7 +45,7 @@
         android:layout_height="wrap_content"
         android:text="Get SMS&apos;"
         android:id="@+id/getSMS"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/editText"
         android:layout_centerHorizontal="true" />
 
     <EditText
@@ -52,16 +53,20 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:ems="10"
+        android:maxLines ="4"
+        android:scrollbars = "vertical"
         android:id="@+id/editText"
-        android:layout_below="@+id/getSMS"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText2"
-        android:layout_above="@+id/getSMS"
-        android:layout_centerHorizontal="true"
-        android:hint="File Output Name With Extension" />
+        android:hint="File Output Name With Extension"
+        android:layout_below="@+id/getSMS"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
             rootView = (sectionNum == 1 ? inflater.inflate(R.layout.sendfragment, container, false) : inflater.inflate(R.layout.receivefragment, container, false));
 
             //Sets up the selected view
+            //First screen: Sending Screen
             if(sectionNum == 1) {
                 buttonOpenDialog = (Button) rootView.findViewById(R.id.opendialog);
                 buttonOpenDialog.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+            //Second screen: Recieving Screen
             else
             {
                 recieveText = (EditText) rootView.findViewById(R.id.editText);
@@ -330,8 +332,8 @@ public class MainActivity extends AppCompatActivity {
             File sellect = new File(sell);
             warnTxtBytes.setText(String.valueOf(sellect.length()) + " bytes");
             TextView warnTxtMessages = (TextView) dialog.findViewById(R.id.warnTxtMessages);
-            double massages = Math.ceil(sellect.length()/130)+3; //For 140 Char message it was 105
-            double messagesNum = (massages == 3 ? massages + 1 : massages);
+            double massages = Math.ceil(sellect.length()/130)+2; //For 140 Char message it was 105
+            double messagesNum = (massages == 2 ? massages + 1 : massages);
             warnTxtMessages.setText(String.format("%.0f", messagesNum).replace(".0", "") + " messages");
             double processTime = Math.ceil((sellect.length() * 0.0000006353240152) + 1)-1;
             double fullTime = processTime + messagesNum;
@@ -397,6 +399,8 @@ public class MainActivity extends AppCompatActivity {
                     isRunning = false;
                 }
             }.start();
+
+            while(isRunning);
 
             Toast.makeText(getActivity(), "Done!",
                     Toast.LENGTH_LONG).show();
